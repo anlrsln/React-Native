@@ -1,46 +1,47 @@
-import React from 'react';
-import { View,Text,SafeAreaView,StyleSheet,TextInput,FlatList,Dimensions} from 'react-native';
-import new_items from "./Components/items.json"
-import Card from "./Components/Card"
+import React from "react"
+import {View,Text,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,Image,ScrollView,Dimensions} from "react-native"
+import news_data from "./news_data.json";
+import news_banner from "./news_banner_data.json"
+import NewsCard from "./Components/NewsCard";
 
 
-const App=()=>{
-  const renderItems=({item})=><Card prods={item}/>
+function App(){
+  const renderNews=({item})=><NewsCard news={item}/>
   return(
     <SafeAreaView style={styles.container}>
-      <View style={styles.head}>
-        <Text style={styles.title}>PatikaStore</Text>
-        <TextInput style={styles.input} placeholder="Ara..."/>
+      <View>
+        <Text style={styles.title}>News</Text>
+        <FlatList
+          ListHeaderComponent={()=>(
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} stickyHeaderIndices={[0]}>
+              {news_banner.map(bannerNews=><Image style={styles.banner_img} source={{uri:bannerNews.imageUrl}}/>)}
+            </ScrollView>
+          )}
+          data={news_data} 
+          keyExtractor={(item,index)=>item.u_id.toString()}
+          renderItem={renderNews}
+        />
       </View>
-      <View></View>
-      <FlatList data={new_items} keyExtractor={(item,index)=>item.id.toString()} renderItem={renderItems} numColumns="2"/>
     </SafeAreaView>
-  )
+  );  
 }
-
-const styles=StyleSheet.create({
+ 
+const styles= StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor:"white",
-  },
-  head:{
-    padding:10,
+    backgroundColor:"#eceff1",
   },
   title:{
     fontSize:50,
     fontWeight:"bold",
-    color:"purple"
+    margin:10
   },
-  input: {
-    padding:10,
-    height: 45,
-    margin: 12,
-    borderWidth: 1,
-    borderRadius:10,
-    backgroundColor:"#eceff1",
-    borderWidth:0
+  banner_img:{
+    height:Dimensions.get("window").height/5,
+    width:Dimensions.get("window").width/2
   },
 })
+
 
 
 export default App;
